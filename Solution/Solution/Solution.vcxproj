@@ -73,10 +73,16 @@
     <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
+    <ExecutablePath>$(SolutionDir)include\GL\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\GLFW\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
+    <ExecutablePath>$(SolutionDir)include\GL\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)include\GL\lib;$(SolutionDir)include\GLFW\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,10 +95,14 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;glu32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)_Binary\"
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"</Command>
+copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
+mkdir "$(SolutionDir)_Binary\Shaders\"
+copy "$(SolutionDir)include\OpenGL-Tutorials\shaders\*.*" "$(SolutionDir)_Binary\Shaders\"
+copy "$(SolutionDir)include\GL\bin\*.*" "$(SolutionDir)_Binary\"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying Binary...</Message>
@@ -123,10 +133,14 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"</Command>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;glu32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)_Binary\"
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"</Command>
+copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
+mkdir "$(SolutionDir)_Binary\Shaders\"
+copy "$(SolutionDir)include\OpenGL-Tutorials\shaders\*.*" "$(SolutionDir)_Binary\Shaders\"
+copy "$(SolutionDir)include\GL\bin\*.*" "$(SolutionDir)_Binary\"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying Binary...</Message>
@@ -148,9 +162,11 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\OpenGL-Tutorials\shader.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\OpenGL-Tutorials\shader.hpp" />
     <ClInclude Include="Main.h" />
   </ItemGroup>
   <ItemGroup>
