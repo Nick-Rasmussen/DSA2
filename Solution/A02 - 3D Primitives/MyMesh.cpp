@@ -277,17 +277,32 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 
 	// Replace this with your code
 
-	vector3 v3Mid = vector3(0.0f, -a_fHeight / 2, 0.0f);
-	vector3 v3Tip = vector3(0.0f, a_fHeight / 2, 0.0f); 
-	vector3 v3Current;
-	vector3 v3Next;
+	//vector3 v3Mid = vector3(0.0f, -a_fHeight / 2, 0.0f);
+	//vector3 v3Tip = vector3(0.0f, a_fHeight / 2, 0.0f); 
+	//vector3 v3Current;
+	//vector3 v3Next;
+	//float fRotation = (PI * 2) / a_nSubdivisions;
+	//for (int i = 0; i < a_nSubdivisions; i++) {
+	//	v3Current = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
+	//	v3Next = vector3(cos(fRotation * (i + 1)), -a_fHeight / 2, sin(fRotation * (i + 1)));
+
+	//	AddTri(v3Mid, v3Current, v3Next);
+	//	AddTri(v3Tip, v3Next, v3Current);
+	//}
+
+	vector3 A;
+	vector3 B;
+	vector3 C;
 	float fRotation = (PI * 2) / a_nSubdivisions;
 	for (int i = 0; i < a_nSubdivisions; i++) {
-		v3Current = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
-		v3Next = vector3(cos(fRotation * (i + 1)), -a_fHeight / 2, sin(fRotation * (i + 1)));
+		A = vector3(0.0f, a_fHeight / 2, 0.0f);
+		B = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
+		C = vector3(cos(fRotation * (i + 1)), -a_fHeight / 2, sin(fRotation * (i + 1)));
 
-		AddTri(v3Mid, v3Current, v3Next);
-		AddTri(v3Tip, v3Next, v3Current);
+		AddTri(A, B, C);
+
+		A.y = -a_fHeight / 2;
+		AddTri(A, C, B);
 	}
 
 	// -------------------------------
@@ -314,26 +329,50 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 
 	// Replace this with your code
 
-	vector3 v3MidTop = vector3(0.0f, a_fHeight / 2, 0.0f);
-	vector3 v3MidBottom = vector3(0.0f, -a_fHeight / 2, 0.0f);
-	vector3 v3Current;
-	vector3 v3Next;
-	vector3 v3Temp;
+	//vector3 v3MidTop = vector3(0.0f, a_fHeight / 2, 0.0f);
+	//vector3 v3MidBottom = vector3(0.0f, -a_fHeight / 2, 0.0f);
+	//vector3 v3Current;
+	//vector3 v3Next;
+	//vector3 v3Temp;
+	//float fRotation = (PI * 2) / a_nSubdivisions;
+	//for (int i = 0; i < a_nSubdivisions; i++) {
+	//	v3Current = vector3(cos(fRotation * i), a_fHeight / 2, sin(fRotation * i));
+	//	v3Next = vector3(cos(fRotation * (i + 1)), a_fHeight / 2, sin(fRotation * (i + 1)));
+
+	//	AddTri(v3Current, v3MidTop, v3Next);
+
+	//	v3Temp = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
+	//	AddTri(v3Temp, v3Current, v3Next);
+
+
+	//	v3Current = vector3(cos(fRotation * (i+1)), -a_fHeight / 2, sin(fRotation * (i+1)));
+	//	AddTri(v3Next, v3Current, v3Temp);
+
+	//	AddTri(v3MidBottom, v3Temp, v3Current);
+	//}
+
+
+
+	vector3 A;
+	vector3 B;
+	vector3 C;
+
 	float fRotation = (PI * 2) / a_nSubdivisions;
 	for (int i = 0; i < a_nSubdivisions; i++) {
-		v3Current = vector3(cos(fRotation * i), a_fHeight / 2, sin(fRotation * i));
-		v3Next = vector3(cos(fRotation * (i + 1)), a_fHeight / 2, sin(fRotation * (i + 1)));
+		A = vector3(0.0f, a_fHeight / 2, 0.0f);
+		B = vector3(cos(fRotation * i), a_fHeight / 2, sin(fRotation * i));
+		C = vector3(cos(fRotation * (i + 1)), a_fHeight / 2, sin(fRotation * (i + 1)));
 
-		AddTri(v3Current, v3MidTop, v3Next);
+		AddTri(B, A, C);
 
-		v3Temp = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
-		AddTri(v3Temp, v3Current, v3Next);
+		A = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
+		AddTri(A, B, C);
 
+		B = vector3(cos(fRotation * (i + 1)), -a_fHeight / 2, sin(fRotation * (i + 1)));
+		AddTri(C, B, A);
 
-		v3Current = vector3(cos(fRotation * (i+1)), -a_fHeight / 2, sin(fRotation * (i+1)));
-		AddTri(v3Next, v3Current, v3Temp);
-
-		AddTri(v3MidBottom, v3Temp, v3Current);
+		C = vector3(0.0f, -a_fHeight / 2, 0.0f);
+		AddTri(B, C, A);
 	}
 
 	// -------------------------------
@@ -365,7 +404,7 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+
 	// -------------------------------
 
 	// Adding information about color
