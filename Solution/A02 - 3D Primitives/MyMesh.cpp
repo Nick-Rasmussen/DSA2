@@ -468,11 +468,40 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 
 	// Replace this with your code
 	
+	vector3 A;
+	vector3 B;
+	vector3 C;
+	vector3 P;
+	vector3 PNext;
+
+	float fRotationOuter = (PI * 2) / a_nSubdivisionsA;
+	float fRotationInner = (PI * 2) / a_nSubdivisionsB;
+
+	for (int i = 0; i < a_nSubdivisionsA; i++) {
+
+		P = vector3(cos(fRotationOuter * i), 0, sin(fRotationOuter * i));
+		PNext = vector3(cos(fRotationOuter * (i + 1)), 0, sin(fRotationOuter * (i + 1)));
+
+		for (int j = 0; j < a_nSubdivisionsB; j++) {
+			A = P + vector3(cos(fRotationInner * j) * a_fInnerRadius,
+				sin(fRotationInner * j),
+				0.0f);
+			B = P + vector3(cos(fRotationInner * j) * a_fInnerRadius,
+				sin(fRotationInner * j),
+				0.0f);
+			C = P + vector3(cos(fRotationInner * (j + 1)),
+				sin(fRotationInner * (j + 1)),
+				1.0f);
+
+			AddTri(A, B, C);
+		}
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
 }
+
 void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Color)
 {
 	if (a_fRadius < 0.01f)
@@ -491,7 +520,6 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Init();
 
 	// Replace this with your code
-	a_nSubdivisions = 10;
 	vector3 A;
 	vector3 B;
 	vector3 C;
@@ -504,24 +532,16 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 			cos(fRotation) * a_fRadius,
 			cos(fRotation * i) * sin(fRotation) * a_fRadius);
 
-		C = vector3(sin(fRotation * (i + 1)) * sin(fRotation) * a_fRadius,
+		C = vector3(sin(fRotation * (i+1)) * sin(fRotation) * a_fRadius,
 			cos(fRotation) * a_fRadius,
-			cos(fRotation * (i + 1)) * sin(fRotation) * a_fRadius);
+			cos(fRotation * (i+1)) * sin(fRotation) * a_fRadius);
 		AddTri(A, B, C);
 
 		//make the rings around
-		for (int j = 1; j < a_nSubdivisions - 1; j++) {
+		for (int j = 0; j < a_nSubdivisions - 1; j++) {
 			A = vector3(sin(fRotation * i) * sin(fRotation * (j + 1)) * a_fRadius,
 				cos(fRotation * (j + 1)) * a_fRadius,
 				cos(fRotation * i) * sin(fRotation * (j + 1)) * a_fRadius);
-
-			B = vector3(sin(fRotation * i) * sin(fRotation * j) * a_fRadius,
-				cos(fRotation * j) * a_fRadius,
-				cos(fRotation * i) * sin(fRotation * j) * a_fRadius);
-
-			C = vector3(sin(fRotation * (i + 1)) * sin(fRotation * j) * a_fRadius,
-				cos(fRotation * j) * a_fRadius,
-				cos(fRotation * (i + 1)) * sin(fRotation * j) * a_fRadius);
 			AddTri(A, C, B);
 
 			B = vector3(sin(fRotation * (i + 1)) * sin(fRotation * (j + 1)) * a_fRadius,
@@ -533,7 +553,7 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 			B = A;
 		}
 
-		//add the circular bottom
+		//generate circular bottom
 		A = vector3(0.0f, -a_fRadius, 0.0f);
 		AddTri(A, C, B);
 	}
