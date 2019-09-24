@@ -467,8 +467,7 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
-	// -------------------------------
+	
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -534,6 +533,7 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 			B = A;
 		}
 
+		//add the circular bottom
 		A = vector3(0.0f, -a_fRadius, 0.0f);
 		AddTri(A, C, B);
 	}
