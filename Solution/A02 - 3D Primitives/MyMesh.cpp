@@ -496,8 +496,21 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
-	// -------------------------------
+	
+	vector3 A;
+	vector3 B;
+	vector3 C;
+	float fRotation = (PI * 2) / a_nSubdivisions;
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		A = vector3(0.0f, a_fRadius, 0.0f);
+		B = vector3(sin(fRotation * i) * sin(fRotation * i) * a_fRadius,
+			cos(fRotation * i) * a_fRadius,
+			cos(fRotation * i) * sin(fRotation * i) * a_fRadius);
+		C = vector3(sin(fRotation * (i+1)) * sin(fRotation * (i+1)) * a_fRadius,
+			cos(fRotation * i) * a_fRadius, 
+			cos(fRotation * (i + 1)) * sin(fRotation * (i + 1)) * a_fRadius);
+		AddTri(A, B, C);
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
