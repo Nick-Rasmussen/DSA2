@@ -277,19 +277,6 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 
 	// Replace this with your code
 
-	//vector3 v3Mid = vector3(0.0f, -a_fHeight / 2, 0.0f);
-	//vector3 v3Tip = vector3(0.0f, a_fHeight / 2, 0.0f); 
-	//vector3 v3Current;
-	//vector3 v3Next;
-	//float fRotation = (PI * 2) / a_nSubdivisions;
-	//for (int i = 0; i < a_nSubdivisions; i++) {
-	//	v3Current = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
-	//	v3Next = vector3(cos(fRotation * (i + 1)), -a_fHeight / 2, sin(fRotation * (i + 1)));
-
-	//	AddTri(v3Mid, v3Current, v3Next);
-	//	AddTri(v3Tip, v3Next, v3Current);
-	//}
-
 	vector3 A = vector3(0.0f);
 	vector3 B;
 	vector3 C;
@@ -328,30 +315,6 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-
-	//vector3 v3MidTop = vector3(0.0f, a_fHeight / 2, 0.0f);
-	//vector3 v3MidBottom = vector3(0.0f, -a_fHeight / 2, 0.0f);
-	//vector3 v3Current;
-	//vector3 v3Next;
-	//vector3 v3Temp;
-	//float fRotation = (PI * 2) / a_nSubdivisions;
-	//for (int i = 0; i < a_nSubdivisions; i++) {
-	//	v3Current = vector3(cos(fRotation * i), a_fHeight / 2, sin(fRotation * i));
-	//	v3Next = vector3(cos(fRotation * (i + 1)), a_fHeight / 2, sin(fRotation * (i + 1)));
-
-	//	AddTri(v3Current, v3MidTop, v3Next);
-
-	//	v3Temp = vector3(cos(fRotation * i), -a_fHeight / 2, sin(fRotation * i));
-	//	AddTri(v3Temp, v3Current, v3Next);
-
-
-	//	v3Current = vector3(cos(fRotation * (i+1)), -a_fHeight / 2, sin(fRotation * (i+1)));
-	//	AddTri(v3Next, v3Current, v3Temp);
-
-	//	AddTri(v3MidBottom, v3Temp, v3Current);
-	//}
-
-
 
 	vector3 A;
 	vector3 B;
@@ -494,10 +457,10 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	CompileOpenGL3X();
 }
 
-vector3 MyMesh::GetPositionOnTorus(float theta, float phi, float innerRadius, float outerRadius) {
-	return vector3(cos(theta) * (outerRadius + innerRadius * cos(phi)),
-		sin(theta) * (outerRadius + innerRadius * cos(phi)),
-		innerRadius * sin(phi));
+vector3 MyMesh::GetPositionOnTorus(float theta, float theta2, float innerRadius, float outerRadius) {
+	return vector3(cos(theta) * (outerRadius + innerRadius * cos(theta2)),
+		sin(theta) * (outerRadius + innerRadius * cos(theta2)),
+		innerRadius * sin(theta2));
 }
 
 vector3 MyMesh::GetPositionOnSphere(float theta, float phi, float radius) {
@@ -518,11 +481,11 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 		return;
 	}
 
-	/*
-	¿por qué?
+	
+	//¿por qué?
 	if (a_nSubdivisions > 6)
 		a_nSubdivisions = 6;
-	*/
+	
 
 	Release();
 	Init();

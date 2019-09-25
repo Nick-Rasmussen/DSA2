@@ -221,7 +221,15 @@ public:
 	*/
 	vector3 GetPositionOnSphere(float theta, float phi, float radius);
 
-	vector3 GetPositionOnTorus(float theta, float phi, float innerRadius, float outerRadius);
+	/*
+	USAGE: returns the position of a point on the surface of a torus
+	-	float theta -> angle in radians around the outer radius
+	-	float theta2 -> angle in radians around the inner radius
+	-	float innerRadius -> radius of the inside of the torus
+	-	float outerRadius -> radius of the outside of the torus
+	OUTPUT: vector3 position
+	*/
+	vector3 GetPositionOnTorus(float theta, float theta2, float innerRadius, float outerRadius);
 #pragma endregion
 };
 
