@@ -433,18 +433,17 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	vector3 A;
 	vector3 B;
 	vector3 C;
-
-	float fRotationOuter = (PI * 2) / a_nSubdivisionsA;
-	float theta = (PI * 2) / a_nSubdivisionsB;
+	float theta = (PI * 2) / a_nSubdivisionsA;
+	float phi = (PI * 2) / a_nSubdivisionsB;
 
 	for (int i = 0; i < a_nSubdivisionsA; i++) {
-		A = GetPositionOnTorus(theta * i, theta, a_fInnerRadius, a_fOuterRadius);
+		A = GetPositionOnTorus(theta * i, 0, a_fInnerRadius, a_fOuterRadius);
 		for (int j = 0; j <= a_nSubdivisionsB; j++) {
-			B = GetPositionOnTorus(theta * i, (theta * (j + 1)), a_fInnerRadius, a_fOuterRadius);
-			C = GetPositionOnTorus(theta * (i + 1), (theta * j), a_fInnerRadius, a_fOuterRadius);
+			B = GetPositionOnTorus(theta * i, (phi * (j + 1)), a_fInnerRadius, a_fOuterRadius);
+			C = GetPositionOnTorus(theta * (i + 1), (phi * j), a_fInnerRadius, a_fOuterRadius);
 			AddTri(B, A, C);
 
-			A = GetPositionOnTorus(theta * (i + 1), (theta * (j + 1)), a_fInnerRadius, a_fOuterRadius);
+			A = GetPositionOnTorus(theta * (i + 1), (phi * (j + 1)), a_fInnerRadius, a_fOuterRadius);
 			AddTri(A, B, C);
 
 			C = A;
@@ -457,10 +456,10 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	CompileOpenGL3X();
 }
 
-vector3 MyMesh::GetPositionOnTorus(float theta, float theta2, float innerRadius, float outerRadius) {
-	return vector3(cos(theta) * (outerRadius + innerRadius * cos(theta2)),
-		sin(theta) * (outerRadius + innerRadius * cos(theta2)),
-		innerRadius * sin(theta2));
+vector3 MyMesh::GetPositionOnTorus(float theta, float phi, float innerRadius, float outerRadius) {
+	return vector3(cos(theta) * (outerRadius + innerRadius * cos(phi)),
+		sin(theta) * (outerRadius + innerRadius * cos(phi)),
+		innerRadius * sin(phi));
 }
 
 vector3 MyMesh::GetPositionOnSphere(float theta, float phi, float radius) {
@@ -483,8 +482,8 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 
 	
 	//¿por qué?
-	if (a_nSubdivisions > 6)
-		a_nSubdivisions = 6;
+	if (a_nSubdivisions > 20)
+		a_nSubdivisions = 20;
 	
 
 	Release();

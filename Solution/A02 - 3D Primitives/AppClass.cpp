@@ -18,9 +18,9 @@ void Application::InitVariables(void)
 	m_pTube = new MyMesh();
 	m_pTube->GenerateTube(0.5f, 0.35f, 1.0f, 7, C_GREEN);
 	m_pSphere = new MyMesh();
-	m_pSphere->GenerateSphere(0.5f, 6, C_BLUE);
+	m_pSphere->GenerateSphere(0.5f, 14, C_BLUE);
 	m_pTorus = new MyMesh();
-	m_pTorus->GenerateTorus(300.0f, 20.0f, 100, 100, C_VIOLET);
+	m_pTorus->GenerateTorus(100.0f, 10.0f, 100, 100, C_VIOLET);
 
 	//Make Mesh object
 	m_pMesh = new MyMesh();
@@ -40,7 +40,7 @@ void Application::InitVariables(void)
 		m_pMesh->GenerateTube(1.0f, 0.7f, 1.0f, 10, C_CYAN);
 		break;
 	case 4:
-		m_pMesh->GenerateSphere(1.0f, 5, C_CYAN);
+		m_pMesh->GenerateSphere(1.0f, 14, C_CYAN);
 		break;
 	case 5:
 		m_pMesh->GenerateTorus(1.0f, 0.6f, 10, 10, C_CYAN);
