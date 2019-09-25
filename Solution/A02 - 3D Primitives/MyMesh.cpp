@@ -468,6 +468,11 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 
 	// Replace this with your code
 	
+	a_nSubdivisionsA = 100;
+	a_nSubdivisionsB = 100;
+	a_fInnerRadius = 10.0f;
+	a_fOuterRadius = 100.0f;
+
 	vector3 A;
 	vector3 B;
 	vector3 C;
@@ -475,31 +480,58 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	vector3 PNext;
 
 	float fRotationOuter = (PI * 2) / a_nSubdivisionsA;
-	float fRotationInner = (PI * 2) / a_nSubdivisionsB;
+	float theta = (PI * 2) / a_nSubdivisionsB;
 
 	for (int i = 0; i < a_nSubdivisionsA; i++) {
+		A = GetPositionOnTorus(theta * i, theta, a_fInnerRadius, a_fOuterRadius);
+		for (int j = 0; j <= a_nSubdivisionsB; j++) {
+			B = GetPositionOnTorus(theta * i, (theta * (j + 1)), a_fInnerRadius, a_fOuterRadius);
+			C = GetPositionOnTorus(theta * (i + 1), (theta * j), a_fInnerRadius, a_fOuterRadius);
+			AddTri(B, A, C);
 
-		P = vector3(cos(fRotationOuter * i), 0, sin(fRotationOuter * i));
-		PNext = vector3(cos(fRotationOuter * (i + 1)), 0, sin(fRotationOuter * (i + 1)));
-
-		for (int j = 0; j < a_nSubdivisionsB; j++) {
-			A = P + vector3(cos(fRotationInner * j) * a_fInnerRadius,
-				sin(fRotationInner * j),
-				0.0f);
-			B = P + vector3(cos(fRotationInner * j) * a_fInnerRadius,
-				sin(fRotationInner * j),
-				0.0f);
-			C = P + vector3(cos(fRotationInner * (j + 1)),
-				sin(fRotationInner * (j + 1)),
-				1.0f);
-
+			A = GetPositionOnTorus(theta * (i + 1), (theta * (j + 1)), a_fInnerRadius, a_fOuterRadius);
 			AddTri(A, B, C);
+
+			C = A;
+			A = B;
 		}
 	}
+
+
+	/*for (int i = 0; i < a_nSubdivisionsA; i++) {
+
+		P = vector3(cos(fRotationOuter * i) * a_fOuterRadius, 0, sin(fRotationOuter * i) * a_fOuterRadius);
+		PNext = vector3(cos(fRotationOuter * (i + 1)) * a_fOuterRadius, 0, sin(fRotationOuter * (i + 1)) * a_fOuterRadius);
+		A = P + GetPositionOnSphere(theta * i, phi, a_fInnerRadius);
+
+		for (int j = 0; j < a_nSubdivisionsB; j++) {
+			B = P + GetPositionOnSphere(theta * i, phi * (j + 1), a_fInnerRadius);
+			C = PNext + GetPositionOnSphere(theta * (i + 1), phi * j, a_fInnerRadius);
+			AddTri(C, A, B);
+
+			A = PNext + GetPositionOnSphere(theta * (i + 1), phi * (j + 1), a_fInnerRadius);
+			AddTri(B, A, C);
+
+			C = A;
+			A = B;
+		}
+	}*/
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
+}
+
+vector3 MyMesh::GetPositionOnTorus(float theta, float phi, float innerRadius, float outerRadius) {
+	return vector3(cos(theta) * (outerRadius + innerRadius * cos(phi)),
+		sin(theta) * (outerRadius + innerRadius * cos(phi)),
+		innerRadius * sin(phi));
+}
+
+vector3 MyMesh::GetPositionOnSphere(float theta, float phi, float radius) {
+	return vector3(sin(theta) * sin(phi) * radius,
+		cos(phi) * radius,
+		cos(theta) * sin(phi) * radius);
 }
 
 void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Color)
@@ -520,33 +552,26 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Init();
 
 	// Replace this with your code
+	a_nSubdivisions = 10;
 	vector3 A;
 	vector3 B;
 	vector3 C;
-	float fRotation = PI / a_nSubdivisions;
-	for (int i = 0; i < a_nSubdivisions * 2; i++) {
+	float phi = PI / a_nSubdivisions;
+	float theta = (PI * 2) / a_nSubdivisions;
+	for (int i = 0; i < a_nSubdivisions; i++) {
 		//make the circular top
 		A = vector3(0.0f, a_fRadius, 0.0f);
 
-		B = vector3(sin(fRotation * i) * sin(fRotation) * a_fRadius,
-			cos(fRotation) * a_fRadius,
-			cos(fRotation * i) * sin(fRotation) * a_fRadius);
-
-		C = vector3(sin(fRotation * (i+1)) * sin(fRotation) * a_fRadius,
-			cos(fRotation) * a_fRadius,
-			cos(fRotation * (i+1)) * sin(fRotation) * a_fRadius);
+		B = GetPositionOnSphere(theta * i, phi, a_fRadius);
+		C = GetPositionOnSphere(theta * (i + 1), phi, a_fRadius);
 		AddTri(A, B, C);
 
 		//make the rings around
 		for (int j = 0; j < a_nSubdivisions - 1; j++) {
-			A = vector3(sin(fRotation * i) * sin(fRotation * (j + 1)) * a_fRadius,
-				cos(fRotation * (j + 1)) * a_fRadius,
-				cos(fRotation * i) * sin(fRotation * (j + 1)) * a_fRadius);
+			A = GetPositionOnSphere(theta * i, phi * (j + 1), a_fRadius);
 			AddTri(A, C, B);
 
-			B = vector3(sin(fRotation * (i + 1)) * sin(fRotation * (j + 1)) * a_fRadius,
-				cos(fRotation * (j + 1)) * a_fRadius,
-				cos(fRotation * (i + 1)) * sin(fRotation * (j + 1)) * a_fRadius);
+			B = GetPositionOnSphere(theta * (i + 1), phi * (j + 1), a_fRadius);
 			AddTri(A, B, C);
 
 			C = B;

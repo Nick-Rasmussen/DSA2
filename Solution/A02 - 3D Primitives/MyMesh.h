@@ -211,6 +211,17 @@ public:
 	OUTPUT: ---
 	*/
 	void GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Color = C_WHITE);
+	/*
+	USAGE: returns the position of a point on the surface of a sphere
+	ARGUMENTS:
+	-	float theta -> angle in radians around the y-axis
+	-	float phi -> angle in radians around the x/z axis
+	-	float radius -> radius of the sphere
+	OUTPUT: vector3 position
+	*/
+	vector3 GetPositionOnSphere(float theta, float phi, float radius);
+
+	vector3 GetPositionOnTorus(float theta, float phi, float innerRadius, float outerRadius);
 #pragma endregion
 };
 
