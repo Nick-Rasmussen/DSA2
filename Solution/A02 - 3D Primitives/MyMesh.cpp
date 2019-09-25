@@ -467,17 +467,9 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Init();
 
 	// Replace this with your code
-	
-	a_nSubdivisionsA = 100;
-	a_nSubdivisionsB = 100;
-	a_fInnerRadius = 10.0f;
-	a_fOuterRadius = 100.0f;
-
 	vector3 A;
 	vector3 B;
 	vector3 C;
-	vector3 P;
-	vector3 PNext;
 
 	float fRotationOuter = (PI * 2) / a_nSubdivisionsA;
 	float theta = (PI * 2) / a_nSubdivisionsB;
@@ -496,26 +488,6 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 			A = B;
 		}
 	}
-
-
-	/*for (int i = 0; i < a_nSubdivisionsA; i++) {
-
-		P = vector3(cos(fRotationOuter * i) * a_fOuterRadius, 0, sin(fRotationOuter * i) * a_fOuterRadius);
-		PNext = vector3(cos(fRotationOuter * (i + 1)) * a_fOuterRadius, 0, sin(fRotationOuter * (i + 1)) * a_fOuterRadius);
-		A = P + GetPositionOnSphere(theta * i, phi, a_fInnerRadius);
-
-		for (int j = 0; j < a_nSubdivisionsB; j++) {
-			B = P + GetPositionOnSphere(theta * i, phi * (j + 1), a_fInnerRadius);
-			C = PNext + GetPositionOnSphere(theta * (i + 1), phi * j, a_fInnerRadius);
-			AddTri(C, A, B);
-
-			A = PNext + GetPositionOnSphere(theta * (i + 1), phi * (j + 1), a_fInnerRadius);
-			AddTri(B, A, C);
-
-			C = A;
-			A = B;
-		}
-	}*/
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -545,14 +517,17 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 		GenerateCube(a_fRadius * 2.0f, a_v3Color);
 		return;
 	}
+
+	/*
+	¿por qué?
 	if (a_nSubdivisions > 6)
 		a_nSubdivisions = 6;
+	*/
 
 	Release();
 	Init();
 
 	// Replace this with your code
-	a_nSubdivisions = 10;
 	vector3 A;
 	vector3 B;
 	vector3 C;
