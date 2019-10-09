@@ -160,7 +160,7 @@ void MyCamera::MoveForward(float a_fDistance)
 
 void MyCamera::MoveVertical(float a_fDistance){
 	vector3 forward = Forward(m_v3Target, m_v3Position);
-	vector3 vertical = vector3(0.0f, forward.z, forward.y);
+	vector3 vertical = glm::normalize(glm::cross(Right(forward), forward));
 
 	m_v3Position += vertical * -a_fDistance;
 	m_v3Target += vertical * -a_fDistance;
