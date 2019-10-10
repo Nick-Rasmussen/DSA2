@@ -122,6 +122,11 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 			}
 		}
 		break;
+	case sf::Keyboard::F:
+		airplaneMode = !airplaneMode;
+		if (!airplaneMode) {
+			m_pCamera->ResetCamera();
+		}
 	}
 
 	//gui
@@ -386,29 +391,53 @@ void Application::ProcessKeyboard(void)
 	*/
 #pragma region Camera Position
 	float fSpeed = 0.1f;
+	float rotationSpeed = 0.01f; //only used in airplane mode
 	float fMultiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
 
 	if (fMultiplier)
 		fSpeed *= 5.0f;
 
-	// forward/backward movement
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+
+	// regular camera movement
+	if (!airplaneMode) {
+		// forward/backward movement
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			m_pCamera->MoveForward(fSpeed);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			m_pCamera->MoveForward(-fSpeed);
+
+		// left/right movement
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			m_pCamera->MoveSideways(fSpeed);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			m_pCamera->MoveSideways(-fSpeed);
+
+		// up/down movement
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			m_pCamera->MoveVertical(fSpeed);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+			m_pCamera->MoveVertical(-fSpeed);
+	}
+
+	//airplane camera movement
+	else {
+		//constant forward velocity
 		m_pCamera->MoveForward(fSpeed);
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_pCamera->MoveForward(-fSpeed);
 
-	// left/right movement
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		m_pCamera->MoveSideways(fSpeed);
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		m_pCamera->MoveSideways(-fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			m_pCamera->AirplaneYaw(rotationSpeed / 2);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			m_pCamera->AirplaneYaw(-rotationSpeed / 2);
 
-	// up/down movement
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		m_pCamera->MoveVertical(fSpeed);
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-		m_pCamera->MoveVertical(-fSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			m_pCamera->Roll(-rotationSpeed);
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			m_pCamera->Roll(rotationSpeed);
+
+		m_pCamera->SetAirplaneRotation();
+	}
+
 #pragma endregion
 }
 //Joystick

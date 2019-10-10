@@ -149,7 +149,6 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 			m_v2NearFar.x, m_v2NearFar.y); //near and far
 	}
 }
-
 void MyCamera::MoveForward(float a_fDistance)
 {
 	vector3 forward = Forward(m_v3Target, m_v3Position);
@@ -174,29 +173,50 @@ void MyCamera::MoveSideways(float a_fDistance){
 	m_v3Above += side * a_fDistance;
 }
 
+//returns the forward vector relative to the camera
 vector3 MyCamera::Forward(vector3 v3_target, vector3 v3_position) {
 	return glm::normalize(v3_target - v3_position);
 }
 
+//returns the right vector relative to the camera
 vector3 MyCamera::Right(vector3 v3_forward) {
-	return glm::normalize(glm::cross(vector3(0.0f, 1.0f, 0.0f),v3_forward));
+	return glm::normalize(glm::cross(m_v3Above,v3_forward));
 }
 
 void MyCamera::Yaw(float angle) {
+	//find new rotation
 	vector3 right = Right(Forward(m_v3Target, m_v3Position));
 	quaternion rotateX = glm::angleAxis(angle, right);
 
 	vector3 forward = Forward(m_v3Target, m_v3Position);
 
+	//apply rotation
 	vector3 newForward = (rotateX * forward) * glm::conjugate(rotateX);
 	SetTarget(m_v3Position + newForward);
 }
 
 void MyCamera::Pitch(float angle) {
+	//find new rotation
 	quaternion rotateY = glm::angleAxis(angle, AXIS_Y);
 
 	vector3 forward = Forward(m_v3Target, m_v3Position);
-	vector3 newForward = (rotateY * forward) * glm::conjugate(rotateY);
 
+	//apply rotation
+	vector3 newForward = (rotateY * forward) * glm::conjugate(rotateY);
 	SetTarget(m_v3Target + newForward);
+}
+
+void MyCamera::Roll(float angle) {
+	phi += angle;
+}
+
+//I'm making a different yaw function for airplane mode because I'm afraid of ruining the one that already works
+void MyCamera::AirplaneYaw(float angle) {
+	theta += angle;
+}
+
+void MyCamera::SetAirplaneRotation() {
+	m_v3Above.x = sin(theta) * sin(phi);
+	m_v3Above.y = cos(phi);
+	m_v3Above.z = sin(phi) * cos(theta);
 }

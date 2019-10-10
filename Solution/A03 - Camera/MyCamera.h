@@ -28,6 +28,9 @@ class MyCamera
 
 	matrix4 m_m4View; //View matrix
 	matrix4 m_m4Projection; //Projection Matrix
+
+	float theta = PI * 180 / 2;
+	float phi = 0;
 public:
 	/*
 	USAGE: Constructor
@@ -242,8 +245,27 @@ public:
 	OUTPUT: noramilized right vector3
 	*/
 	vector3 Right(vector3 v3_forward);
+	/*
+	USAGE: Rotates the camera on the x axis
+	ARGUMENTS: float angle -> the angle in radians to add to the current rotation
+	OUTPUT: ---
+	*/
 	void Yaw(float angle);
+	/*
+	USAGE: Rotates the camera on the y axis
+	ARGUMENTS: float angle -> the angle in radians to add to the current rotation
+	OUTPUT: ---
+	*/
 	void Pitch(float angle);
+	/*
+	USAGE: Rotates the camera on the z axis, only used in airplane mode
+	ARGUMENTS: float angle -> the angle in radians to add to the current rotation
+	OUTPUT: ---
+	*/
+	void Roll(float angle);
+
+	void AirplaneYaw(float angle); // different yaw for airplane mode just in case
+	void SetAirplaneRotation();
 };
 
 } //namespace Simplex
